@@ -1,13 +1,13 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { SignIn, SignUp, SignedIn, SignedOut } from "@clerk/clerk-react";
 
 import Home from "./pages/Home.jsx";
 import Features from "./pages/Features.jsx";
 import Pricing from "./pages/Pricing.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
-// If you have a Dashboard page already:
-import Dashboard from "./pages/Dashboard.jsx";
+import Dashboard from "./pages/Dashboard.jsx"; // assuming this exists
 
 export default function App() {
   return (
@@ -19,8 +19,30 @@ export default function App() {
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
 
-      {/* Existing dashboard route (if present) */}
-      <Route path="/dashboard" element={<Dashboard />} />
+      {/* Auth pages */}
+      <Route
+        path="/sign-in"
+        element={<SignIn routing="path" path="/sign-in" />}
+      />
+      <Route
+        path="/sign-up"
+        element={<SignUp routing="path" path="/sign-up" />}
+      />
+
+      {/* Protected dashboard route */}
+      <Route
+        path="/dashboard"
+        element={
+          <>
+            <SignedIn>
+              <Dashboard />
+            </SignedIn>
+            <SignedOut>
+              <Navigate to="/sign-in" />
+            </SignedOut>
+          </>
+        }
+      />
 
       {/* Fallback */}
       <Route path="*" element={<Home />} />

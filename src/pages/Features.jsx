@@ -48,6 +48,18 @@ const Features = () => {
       >
         Dashboard
       </Link>
+      <Link
+        to="/sign-in"
+        className="text-slate-300 hover:text-indigo-300"
+      >
+        Sign in
+      </Link>
+      <Link
+        to="/sign-up"
+        className="rounded-full border border-indigo-500 px-3 py-1 text-xs text-indigo-300 hover:bg-indigo-500/10"
+      >
+        Sign up
+      </Link>
     </nav>
   </div>
 </header>
