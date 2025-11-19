@@ -1,13 +1,19 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { SignIn, SignUp, SignedIn, SignedOut } from "@clerk/clerk-react";
+import {
+  SignIn,
+  SignUp,
+  SignedIn,
+  SignedOut,
+} from "@clerk/clerk-react";
 
 import Home from "./pages/Home.jsx";
 import Features from "./pages/Features.jsx";
 import Pricing from "./pages/Pricing.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
-import Dashboard from "./pages/Dashboard.jsx"; // assuming this exists
+import Dashboard from "./pages/Dashboard.jsx";
+import EventView from "./pages/EventView.jsx";
 
 export default function App() {
   return (
@@ -22,11 +28,23 @@ export default function App() {
       {/* Auth pages */}
       <Route
         path="/sign-in"
-        element={<SignIn routing="path" path="/sign-in" />}
+        element={
+          <SignIn
+            routing="path"
+            path="/sign-in"
+            afterSignInUrl="/dashboard"
+          />
+        }
       />
       <Route
         path="/sign-up"
-        element={<SignUp routing="path" path="/sign-up" />}
+        element={
+          <SignUp
+            routing="path"
+            path="/sign-up"
+            afterSignUpUrl="/dashboard"
+          />
+        }
       />
 
       {/* Protected dashboard route */}
@@ -43,6 +61,9 @@ export default function App() {
           </>
         }
       />
+
+      {/* Public event pages */}
+      <Route path="/events/:eventId" element={<EventView />} />
 
       {/* Fallback */}
       <Route path="*" element={<Home />} />
