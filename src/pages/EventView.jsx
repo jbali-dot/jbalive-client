@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import Header from "../components/Header.jsx";
 
 const EventView = () => {
   const { eventId } = useParams();
@@ -16,53 +17,7 @@ const EventView = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
       {/* Header with nav, same as other pages */}
-      <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-indigo-500 text-xs font-bold">
-              JB
-            </div>
-            <span className="text-lg font-semibold tracking-tight">
-              JBAlive
-            </span>
-          </Link>
-          <nav className="hidden md:flex items-center gap-5 text-sm">
-            <Link to="/" className="text-slate-300 hover:text-indigo-300">
-              Home
-            </Link>
-            <Link
-              to="/features"
-              className="text-slate-300 hover:text-indigo-300"
-            >
-              Features
-            </Link>
-            <Link
-              to="/pricing"
-              className="text-slate-300 hover:text-indigo-300"
-            >
-              Pricing
-            </Link>
-            <Link
-              to="/about"
-              className="text-slate-300 hover:text-indigo-300"
-            >
-              About
-            </Link>
-            <Link
-              to="/contact"
-              className="text-slate-300 hover:text-indigo-300"
-            >
-              Contact
-            </Link>
-            <Link
-              to="/dashboard"
-              className="text-slate-300 hover:text-indigo-300"
-            >
-              Dashboard
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       <main className="flex-1">
         <div className="mx-auto max-w-4xl px-4 py-10 space-y-6">
