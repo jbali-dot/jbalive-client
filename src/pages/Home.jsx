@@ -8,7 +8,6 @@ const Home = () => {
       {/* Top navigation */}
       <Header />
 
-
       {/* Main content */}
       <main className="flex-1">
         {/* Hero */}
@@ -17,36 +16,42 @@ const Home = () => {
             {/* Left column */}
             <div className="flex-1 space-y-5">
               <p className="inline-flex items-center gap-2 rounded-full border border-indigo-500/40 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-200">
-                Virtual events, without the technical stress
+                Go live. Engage. Convert.
               </p>
 
               <h1 className="text-3xl font-bold tracking-tight text-slate-50 md:text-5xl">
-                Host virtual events people{" "}
-                <span className="text-indigo-400">actually stay for.</span>
+                Host stunning virtual events{" "}
+                <span className="text-indigo-400">without technical stress.</span>
               </h1>
 
               <p className="max-w-xl text-sm text-slate-300 md:text-base">
-                JBAlive is a modern, interactive virtual event, webinar and
-                live-broadcast platform designed for coaches, consultants,
-                agencies and creators who want professional-grade online events
-                with zero technical complexity.
+                JBAlive is your all-in-one platform to host virtual events,
+                webinars, product launches and live broadcasts that look
+                professional and convert viewers into clients.
               </p>
 
               <div className="flex flex-wrap items-center gap-3 text-sm">
                 <Link
-                  to="/contact"
+                  to="/pricing"
                   className="rounded-full bg-indigo-500 px-5 py-2.5 font-medium text-white shadow-md hover:bg-indigo-400 transition"
                 >
-                  Book a 30-minute demo
+                  Start free
                 </Link>
                 <Link
-                  to="/pricing"
+                  to="/contact"
                   className="rounded-full border border-slate-700 px-5 py-2.5 text-slate-100 hover:border-indigo-400 hover:text-indigo-200 transition"
                 >
-                  View pricing
+                  Book a demo
+                </Link>
+                <Link
+                  to="/dashboard"
+                  className="rounded-full border border-slate-700 px-5 py-2.5 text-slate-100 hover:border-indigo-400 hover:text-indigo-200 transition"
+                >
+                  Create your first event
                 </Link>
                 <p className="w-full text-xs text-slate-400 md:w-auto">
-                  No complex setup • No extra tools • Go live in minutes
+                  No complicated setup • Custom branded event pages • HD streaming &amp; live chat •
+                  Automated replays • Analytics &amp; engagement insights
                 </p>
               </div>
             </div>
