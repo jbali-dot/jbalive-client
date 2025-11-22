@@ -1,73 +1,63 @@
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import {
-  SignIn,
-  SignUp,
-  SignedIn,
-  SignedOut,
-} from "@clerk/clerk-react";
+import { useState } from 'react';
+import DashboardLayout from './components/layout/DashboardLayout';
+import EventsPage from './pages/EventsPage';
 
-import Home from "./pages/Home.jsx";
-import Features from "./pages/Features.jsx";
-import Pricing from "./pages/Pricing.jsx";
-import About from "./pages/About.jsx";
-import Contact from "./pages/Contact.jsx";
-import Dashboard from "./pages/Dashboard.jsx";
-import EventView from "./pages/EventView.jsx";
-
-export default function App() {
+function ComingSoon({ title }) {
   return (
-    <Routes>
-      {/* Public marketing pages */}
-      <Route path="/" element={<Home />} />
-      <Route path="/features" element={<Features />} />
-      <Route path="/pricing" element={<Pricing />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/contact" element={<Contact />} />
-
-      {/* Auth pages */}
-      <Route
-        path="/sign-in"
-        element={
-          <SignIn
-            routing="path"
-            path="/sign-in"
-            afterSignInUrl="/dashboard"
-          />
-        }
-      />
-      <Route
-        path="/sign-up"
-        element={
-          <SignUp
-            routing="path"
-            path="/sign-up"
-            afterSignUpUrl="/dashboard"
-          />
-        }
-      />
-
-      {/* Protected dashboard route */}
-      <Route
-        path="/dashboard"
-        element={
-          <>
-            <SignedIn>
-              <Dashboard />
-            </SignedIn>
-            <SignedOut>
-              <Navigate to="/sign-in" />
-            </SignedOut>
-          </>
-        }
-      />
-
-      {/* Public event pages */}
-      <Route path="/events/:eventId" element={<EventView />} />
-
-      {/* Fallback */}
-      <Route path="*" element={<Home />} />
-    </Routes>
+    <div className="h-full flex flex-col items-start justify-center gap-3">
+      <h2 className="text-xl font-semibold">{title}</h2>
+      <p className="text-sm text-gray-400 max-w-md">
+        This section is not ready yet. It will soon let you manage{' '}
+        <span className="text-gray-200">{title}</span> inside the JBAlive
+        dashboard.
+      </p>
+      <p className="text-xs text-gray-500">
+        For now, you can create and manage your events from the{' '}
+        <span className="text-indigo-400 font-medium">Events</span> section.
+      </p>
+    </div>
   );
 }
 
+function App() {
+  const [activeMenu, setActiveMenu] = useState('events');
+
+  const renderContent = () => {
+    switch (activeMenu) {
+      case 'dashboard':
+        return (
+          <div className="space-y-4">
+            <h2 className="text-lg font-semibold">Dashboard</h2>
+            <p className="text-sm text-gray-400">
+              This will later show a high-level overview of your upcoming events,
+              registrations and performance. For now, go to{' '}
+              <span className="text-indigo-400 font-medium">Events</span> to
+              manage your sessions.
+            </p>
+          </div>
+        );
+      case 'events':
+        return <EventsPage />;
+      case 'eventStudio':
+        return <ComingSoon title="Event Studio" />;
+      case 'videoStudio':
+        return <ComingSoon title="Video Studio" />;
+      case 'liveSessions':
+        return <ComingSoon title="Live Sessions" />;
+      case 'mediaLibrary':
+        return <ComingSoon title="Media Library" />;
+      case 'settings':
+        return <ComingSoon title="Settings" />;
+      default:
+        return <EventsPage />;
+    }
+  };
+
+  return (
+    <DashboardLayout activeMenu={activeMenu} onMenuClick={setActiveMenu}>
+      {renderContent()}
+    </DashboardLayout>
+  );
+}
+
+export default App;
