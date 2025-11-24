@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Header from "../components/Header.jsx";
+import Footer from "../components/Footer.jsx";
 
 const About = () => {
   return (
@@ -249,6 +250,9 @@ const About = () => {
           </section>
         </div>
       </main>
+
+      {/* Shared footer */}
+      <Footer />
     </div>
   );
 };

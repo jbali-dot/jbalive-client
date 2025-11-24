@@ -1,12 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import Header from "../components/Header.jsx";
+import Footer from "../components/Footer.jsx";
 
 const Contact = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+      {/* Header */}
       <Header />
 
+      {/* Main */}
       <main className="flex-1">
         <div className="mx-auto max-w-5xl px-4 py-10 space-y-6">
           <section>
@@ -21,6 +23,7 @@ const Contact = () => {
           </section>
 
           <section className="grid gap-6 md:grid-cols-[2fr,1.2fr]">
+            {/* Contact form */}
             <form className="space-y-4 rounded-2xl border border-slate-800 bg-slate-900/70 p-5">
               <div>
                 <label className="block text-xs font-medium text-slate-200 mb-1">
@@ -80,6 +83,7 @@ const Contact = () => {
               </button>
             </form>
 
+            {/* Sidebar */}
             <div className="space-y-4 text-sm text-slate-300">
               <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4">
                 <h2 className="text-sm font-semibold text-slate-100 mb-2">
@@ -98,7 +102,7 @@ const Contact = () => {
                 </a>
               </div>
 
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 text-xs text-slate-300">
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 text-xs text-slate-300 space-y-1">
                 <p>Email: contact@jbalive.com (placeholder)</p>
                 <p className="mt-1">
                   Or learn more at{" "}
@@ -116,6 +120,9 @@ const Contact = () => {
           </section>
         </div>
       </main>
+
+      {/* Shared footer */}
+      <Footer />
     </div>
   );
 };
