@@ -1,126 +1,79 @@
-export default function DashboardLayout({ children, activeMenu, onMenuClick }) {
-  const handleClick = (key) => {
-    if (onMenuClick) {
-      onMenuClick(key);
-    }
-  };
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-  const baseItemClasses =
-    'w-full text-left px-3 py-2 rounded-xl text-sm transition';
-  const activeClasses = 'bg-gray-800/80 text-gray-100 font-medium';
-  const inactiveClasses = 'text-gray-300 hover:bg-gray-800/60';
+const MENU_ITEMS = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'events', label: 'Events' },
+  { id: 'eventStudio', label: 'Event Studio' },
+  { id: 'videoStudio', label: 'Video Studio' },
+  { id: 'mediaLibrary', label: 'Media Library' },
+  { id: 'settings', label: 'Settings' },
+];
 
-  const isActive = (key) => activeMenu === key;
-
+export default function DashboardLayout({ activeMenu, onMenuClick, children }) {
   return (
     <div className="min-h-screen bg-[#050814] text-gray-100 flex">
       {/* Sidebar */}
-      <aside className="w-64 border-r border-gray-800 bg-[#050814]/90 backdrop-blur flex flex-col">
-        <div className="px-6 py-4 border-b border-gray-800">
-          <div className="text-lg font-semibold tracking-tight">
-            JBAlive
-          </div>
-          <div className="text-xs text-gray-400">
-            Event Studio
-          </div>
+      <aside className="w-60 border-r border-gray-800 bg-[#050814] flex flex-col">
+        <div className="px-4 py-4 border-b border-gray-800">
+          <div className="text-sm font-semibold">JBAlive Dashboard</div>
+          <div className="text-[11px] text-gray-500">Manage your live experiences</div>
         </div>
 
-        <nav className="mt-4 px-3 space-y-1 text-sm">
-          <button
-            className={
-              baseItemClasses +
-              ' ' +
-              (isActive('dashboard') ? activeClasses : inactiveClasses)
-            }
-            onClick={() => handleClick('dashboard')}
-          >
-            Dashboard
-          </button>
-          <button
-            className={
-              baseItemClasses +
-              ' ' +
-              (isActive('events') ? activeClasses : inactiveClasses)
-            }
-            onClick={() => handleClick('events')}
-          >
-            Events
-          </button>
-          <button
-            className={
-              baseItemClasses +
-              ' ' +
-              (isActive('eventStudio') ? activeClasses : inactiveClasses)
-            }
-            onClick={() => handleClick('eventStudio')}
-          >
-            Event Studio
-          </button>
-          <button
-            className={
-              baseItemClasses +
-              ' ' +
-              (isActive('videoStudio') ? activeClasses : inactiveClasses)
-            }
-            onClick={() => handleClick('videoStudio')}
-          >
-            Video Studio
-          </button>
-          <button
-            className={
-              baseItemClasses +
-              ' ' +
-              (isActive('liveSessions') ? activeClasses : inactiveClasses)
-            }
-            onClick={() => handleClick('liveSessions')}
-          >
-            Live Sessions
-          </button>
-          <button
-            className={
-              baseItemClasses +
-              ' ' +
-              (isActive('mediaLibrary') ? activeClasses : inactiveClasses)
-            }
-            onClick={() => handleClick('mediaLibrary')}
-          >
-            Media Library
-          </button>
-          <button
-            className={
-              baseItemClasses +
-              ' ' +
-              (isActive('settings') ? activeClasses : inactiveClasses)
-            }
-            onClick={() => handleClick('settings')}
-          >
-            Settings
-          </button>
+        <nav className="flex-1 px-2 py-4 space-y-1 text-sm">
+          {MENU_ITEMS.map((item) => {
+            const isActive = activeMenu === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => onMenuClick(item.id)}
+                className={[
+                  'w-full text-left px-3 py-2 rounded-lg transition-colors',
+                  isActive
+                    ? 'bg-indigo-600/20 text-indigo-300'
+                    : 'text-gray-300 hover:bg-gray-800/60',
+                ].join(' ')}
+              >
+                {item.label}
+              </button>
+            );
+          })}
         </nav>
 
-        <div className="mt-auto px-4 py-4 text-xs text-gray-500 border-t border-gray-800">
-          Logged in as
-          <div className="text-gray-300 font-medium">
-            Joshua Benjamin Ali
-          </div>
+        <div className="px-4 py-3 border-t border-gray-800 text-[11px] text-gray-500">
+          Logged in as<br />
+          <span className="text-gray-300">Joshua Benjamin Ali</span>
         </div>
       </aside>
 
-      {/* Main content */}
-      <main className="flex-1 flex flex-col">
-        <header className="px-8 pt-6 pb-4 border-b border-gray-800">
-          <h1 className="text-2xl font-semibold">
-            Welcome back, Joshua Benjamin.
-          </h1>
-          <p className="text-sm text-gray-400 mt-1">
-            Create, manage and share your JBAlive events from one place.
-          </p>
+      {/* Main area */}
+      <div className="flex-1 flex flex-col">
+        {/* Top bar */}
+        <header className="h-14 border-b border-gray-800 flex items-center justify-between px-4 bg-[#050814]/95 backdrop-blur">
+          <div className="text-xs text-gray-400">
+            {activeMenu === 'overview' && 'Overview of your JBAlive workspace'}
+            {activeMenu === 'events' && 'Create, manage and share your events'}
+            {activeMenu === 'eventStudio' && 'Design your event pages with JBAlive'}
+            {activeMenu === 'videoStudio' && 'Prepare and edit event videos'}
+            {activeMenu === 'mediaLibrary' && 'Manage your logos, banners and media'}
+            {activeMenu === 'settings' && 'Workspace and account settings'}
+          </div>
+          <div className="flex items-center gap-3 text-[11px] text-gray-400">
+            <span className="hidden md:inline">Where Business Meets Broadcast</span>
+            <Link
+              to="/"
+              className="px-3 py-1.5 rounded-full border border-gray-700 hover:border-indigo-500 hover:text-indigo-200"
+            >
+              ← Back to website
+            </Link>
+          </div>
         </header>
 
-        <div className="flex-1 px-8 py-6">
-          {children}
-        </div>
-      </main>
+        {/* Content */}
+        <main className="flex-1 p-4 overflow-y-auto">
+          <div className="max-w-6xl mx-auto">{children}</div>
+        </main>
+      </div>
     </div>
   );
 }
