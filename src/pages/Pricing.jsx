@@ -3,14 +3,20 @@ import { Link } from "react-router-dom";
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
 
+// Update these if your routes/links change
+const STARTER_SIGNUP_PATH = "/sign-up"; // Clerk SignUp route (adjust if needed)
+const PRO_CHECKOUT_URL =
+  "https://buy.stripe.com/8x2eVd5el6ij39U8Rt9ws01";
+const BUSINESS_CHECKOUT_URL =
+  "https://buy.stripe.com/4gM7sL8qxfSTcKugjV9ws02";
+
 const Pricing = () => {
   const [billingPeriod, setBillingPeriod] = React.useState("monthly"); // "monthly" | "yearly"
-
   const isYearly = billingPeriod === "yearly";
 
   const formatPrice = (monthlyPrice) => {
     if (!isYearly) return `€${monthlyPrice}`;
-    const yearly = monthlyPrice * 12 * 0.8; // 20% off
+    const yearly = monthlyPrice * 12 * 0.8; // 20% off on yearly
     return `€${Math.round(yearly)}`;
   };
 
@@ -23,20 +29,24 @@ const Pricing = () => {
 
       {/* Main content */}
       <main className="flex-1">
-        <div className="mx-auto max-w-6xl px-4 py-12 space-y-10">
+        <div className="mx-auto max-w-6xl px-4 py-12 space-y-12">
           {/* Page Header */}
           <section className="text-center space-y-4">
-            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
               Simple, transparent pricing for serious events
             </h1>
             <p className="text-slate-400 text-sm md:text-base max-w-2xl mx-auto">
-              Start small, grow into bigger launches and recurring webinar series.
-              Switch plans as your audience and event calendar expands.
+              Start free, then grow into launches, recurring webinars and
+              community events. Choose a plan that grows with your audience.
             </p>
 
             {/* Billing toggle */}
             <div className="flex items-center justify-center gap-3 pt-3">
-              <span className={`text-xs md:text-sm ${!isYearly ? "text-slate-50" : "text-slate-400"}`}>
+              <span
+                className={`text-xs md:text-sm ${
+                  !isYearly ? "text-slate-50" : "text-slate-400"
+                }`}
+              >
                 Monthly
               </span>
               <button
@@ -46,15 +56,21 @@ const Pricing = () => {
                     prev === "monthly" ? "yearly" : "monthly"
                   )
                 }
-                className="relative inline-flex h-7 w-14 items-center rounded-full bg-slate-800 px-1 transition"
+                className="relative inline-flex h-7 w-16 items-center rounded-full bg-slate-800 px-1 transition"
               >
                 <span
-                  className={`inline-block h-5 w-5 transform rounded-full bg-indigo-500 shadow-md transition ${
+                  className={`inline-block h-5 w-7 transform rounded-full bg-indigo-500 shadow-md text-[10px] flex items-center justify-center transition ${
                     isYearly ? "translate-x-7" : "translate-x-0"
                   }`}
-                />
+                >
+                  {isYearly ? "-20%" : "Std"}
+                </span>
               </button>
-              <span className={`text-xs md:text-sm ${isYearly ? "text-slate-50" : "text-slate-400"}`}>
+              <span
+                className={`text-xs md:text-sm ${
+                  isYearly ? "text-slate-50" : "text-slate-400"
+                }`}
+              >
                 Yearly
               </span>
               <span className="text-[11px] md:text-xs text-emerald-300 bg-emerald-500/10 border border-emerald-500/40 rounded-full px-2 py-0.5">
@@ -66,7 +82,7 @@ const Pricing = () => {
           {/* Pricing Grid */}
           <section className="grid gap-6 md:grid-cols-4">
             {/* Starter */}
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 flex flex-col">
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 flex flex-col hover:border-indigo-500/50 hover:shadow-lg hover:shadow-indigo-500/10 transition">
               <h3 className="text-lg font-semibold">Starter</h3>
               <p className="mt-1 text-xs uppercase tracking-wide text-slate-400">
                 For testing ideas
@@ -85,17 +101,18 @@ const Pricing = () => {
                 <li>✔ Standard JBAlive branding</li>
               </ul>
 
+              {/* Starter → Signup */}
               <Link
-                to="/contact"
-                className="mt-6 inline-block w-full rounded-xl border border-slate-700 py-2.5 text-center text-sm hover:border-indigo-400 hover:text-indigo-200 transition"
+                to={STARTER_SIGNUP_PATH}
+                className="mt-6 inline-flex items-center justify-center w-full rounded-xl border border-slate-700 py-2.5 text-sm hover:border-indigo-400 hover:text-indigo-200 transition"
               >
                 Get started free
               </Link>
             </div>
 
             {/* Pro (Highlighted) */}
-            <div className="rounded-2xl border border-indigo-500 bg-slate-900 p-6 shadow-xl shadow-indigo-500/20 scale-105 flex flex-col relative overflow-hidden">
-              <div className="absolute inset-x-0 -top-10 h-20 bg-gradient-to-b from-indigo-500/20 to-transparent pointer-events-none" />
+            <div className="rounded-2xl border border-indigo-500 bg-slate-900 p-6 shadow-xl shadow-indigo-500/30 scale-105 flex flex-col relative overflow-hidden">
+              <div className="absolute inset-x-0 -top-10 h-24 bg-gradient-to-b from-indigo-500/30 to-transparent pointer-events-none" />
               <div className="flex items-center justify-between relative z-10">
                 <h3 className="text-lg font-semibold">Pro</h3>
                 <span className="text-[11px] bg-indigo-500/20 text-indigo-200 px-2.5 py-1 rounded-full">
@@ -104,13 +121,11 @@ const Pricing = () => {
               </div>
 
               <div className="mt-4 relative z-10">
-                <p className="text-3xl font-bold">
-                  {formatPrice(29)}
-                </p>
+                <p className="text-3xl font-bold">{formatPrice(29)}</p>
                 <p className="text-slate-400 text-xs">{periodLabel}</p>
               </div>
 
-              <ul className="mt-5 space-y-2 text-sm text-slate-200 flex-1">
+              <ul className="mt-5 space-y-2 text-sm text-slate-200 flex-1 relative z-10">
                 <li>✔ Unlimited events</li>
                 <li>✔ Up to 500 live attendees</li>
                 <li>✔ Custom branding & colours</li>
@@ -120,12 +135,15 @@ const Pricing = () => {
                 <li>✔ Access to Video Studio for highlight clips</li>
               </ul>
 
-              <Link
-                to="/contact"
-                className="mt-6 inline-block w-full rounded-xl bg-indigo-500 py-2.5 text-center text-sm font-medium hover:bg-indigo-400 transition relative z-10"
+              {/* Pro → Stripe checkout */}
+              <a
+                href={PRO_CHECKOUT_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-6 inline-flex items-center justify-center w-full rounded-xl bg-indigo-500 py-2.5 text-sm font-medium hover:bg-indigo-400 transition relative z-10"
               >
                 Upgrade to Pro
-              </Link>
+              </a>
 
               <p className="mt-2 text-[11px] text-slate-400 relative z-10">
                 Ideal for regular webinars, launches and live trainings.
@@ -133,7 +151,7 @@ const Pricing = () => {
             </div>
 
             {/* Business */}
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 flex flex-col">
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 flex flex-col hover:border-indigo-500/50 hover:shadow-lg hover:shadow-indigo-500/10 transition">
               <h3 className="text-lg font-semibold">Business</h3>
               <p className="mt-1 text-xs uppercase tracking-wide text-slate-400">
                 For growing teams
@@ -153,16 +171,19 @@ const Pricing = () => {
                 <li>✔ Advanced analytics & export</li>
               </ul>
 
-              <Link
-                to="/contact"
-                className="mt-6 inline-block w-full rounded-xl border border-slate-700 py-2.5 text-center text-sm hover:border-indigo-400 hover:text-indigo-200 transition"
+              {/* Business → Stripe checkout */}
+              <a
+                href={BUSINESS_CHECKOUT_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-6 inline-flex items-center justify-center w-full rounded-xl border border-indigo-400 text-indigo-200 py-2.5 text-sm hover:bg-indigo-500/10 transition"
               >
-                Talk about Business
-              </Link>
+                Choose Business
+              </a>
             </div>
 
             {/* Enterprise */}
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 flex flex-col">
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 flex flex-col hover:border-indigo-500/50 hover:shadow-lg hover:shadow-indigo-500/10 transition">
               <h3 className="text-lg font-semibold">Enterprise</h3>
               <p className="mt-1 text-xs uppercase tracking-wide text-slate-400">
                 For large audiences
@@ -181,9 +202,10 @@ const Pricing = () => {
                 <li>✔ Custom SLAs and reporting</li>
               </ul>
 
+              {/* Enterprise → Contact Sales */}
               <Link
                 to="/contact"
-                className="mt-6 inline-block w-full rounded-xl border border-indigo-500 text-indigo-300 py-2.5 text-center text-sm hover:bg-indigo-500/10 transition"
+                className="mt-6 inline-flex items-center justify-center w-full rounded-xl border border-indigo-500 text-indigo-300 py-2.5 text-sm hover:bg-indigo-500/10 transition"
               >
                 Contact sales
               </Link>
@@ -193,7 +215,7 @@ const Pricing = () => {
           {/* Comparison section */}
           <section className="space-y-4">
             <div className="flex items-center justify-between gap-4">
-              <h2 className="text-lg font-semibold md:text-xl">
+              <h2 className="text-lg md:text-xl font-semibold">
                 Compare plans at a glance
               </h2>
               <p className="hidden md:block text-xs text-slate-400">
@@ -260,10 +282,10 @@ const Pricing = () => {
             </div>
           </section>
 
-          {/* Bottom Section / CTA + FAQ */}
+          {/* CTA + FAQ */}
           <section className="grid gap-6 md:grid-cols-[1.3fr,1fr] items-start">
             <div className="space-y-3">
-              <h2 className="text-lg font-semibold md:text-xl">
+              <h2 className="text-lg md:text-xl font-semibold">
                 Not sure which plan is right for you?
               </h2>
               <p className="text-sm text-slate-300">
@@ -291,15 +313,21 @@ const Pricing = () => {
             <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 text-xs text-slate-300 space-y-2">
               <p className="font-semibold text-slate-100">Common questions</p>
               <p>
-                <span className="font-semibold text-slate-100">Can I change plans?</span>{" "}
+                <span className="font-semibold text-slate-100">
+                  Can I change plans?
+                </span>{" "}
                 Yes. You&apos;ll be able to upgrade as your events grow.
               </p>
               <p>
-                <span className="font-semibold text-slate-100">Is there a free trial?</span>{" "}
+                <span className="font-semibold text-slate-100">
+                  Is there a free trial?
+                </span>{" "}
                 The Starter plan lets you test the full flow with 1 event per month.
               </p>
               <p>
-                <span className="font-semibold text-slate-100">Do you offer help with setup?</span>{" "}
+                <span className="font-semibold text-slate-100">
+                  Do you offer help with setup?
+                </span>{" "}
                 For Business and Enterprise, we can support your first major event
                 and help set up your event studio.
               </p>
