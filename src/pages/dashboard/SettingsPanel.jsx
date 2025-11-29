@@ -1,304 +1,464 @@
-import React from "react";
+import React, { useState } from "react";
+
+const TABS = [
+  { id: "account", label: "Account" },
+  { id: "workspace", label: "Workspace & preferences" },
+  { id: "notifications", label: "Notifications" },
+  { id: "billing", label: "Billing" },
+  { id: "danger", label: "Danger zone" },
+];
 
 export default function SettingsPanel() {
+  const [activeTab, setActiveTab] = useState("account");
+
   return (
-    <div className="space-y-6">
-      {/* PAGE HEADER */}
-      <header className="space-y-1">
-        <h1 className="text-xl font-semibold text-gray-100">
+    <div className="space-y-5">
+      {/* Header */}
+      <header className="space-y-2">
+        <h1 className="text-xl font-semibold text-slate-100">
           Settings
         </h1>
-        <p className="text-sm text-gray-400 max-w-2xl">
-          Configure your JBAlive account, login details, workspace branding and
-          platform preferences. Most of this is MVP-only for now, but it shows
-          how the full settings center will look.
+        <p className="text-sm text-slate-400 max-w-2xl">
+          Manage your JBAlive account, workspace preferences, notifications and billing.
+          Most settings here are for structure and UI in the MVP – actual updates will
+          be wired to a backend later.
         </p>
       </header>
 
-      {/* GRID LAYOUT */}
-      <div className="grid gap-5 lg:grid-cols-[1.4fr,1.3fr]">
-        {/* LEFT COLUMN – ACCOUNT & WORKSPACE */}
-        <div className="space-y-4">
-          {/* ACCOUNT DETAILS (LOGIN) */}
-          <section className="rounded-xl border border-gray-800 bg-[#050814] p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-sm font-semibold text-gray-100">
-                  Account details
-                </h2>
-                <p className="text-xs text-gray-400">
-                  Manage your login email and basic profile information.
-                </p>
-              </div>
-              <span className="text-[10px] rounded-full border border-indigo-500/40 bg-indigo-500/10 px-2 py-0.5 text-indigo-200 uppercase tracking-[0.16em]">
-                Auth via Clerk
-              </span>
-            </div>
+      {/* Tabs */}
+      <div className="flex flex-wrap gap-2 text-[11px]">
+        {TABS.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={[
+              "px-3 py-1.5 rounded-full border",
+              activeTab === tab.id
+                ? "border-indigo-500 bg-indigo-600/20 text-indigo-200"
+                : "border-slate-700 text-slate-300 hover:border-indigo-500",
+            ].join(" ")}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
 
-            <div className="grid gap-3 md:grid-cols-2 text-xs">
-              <div className="space-y-1">
-                <label className="block text-gray-300">Display name</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Joshua Benjamin Ali"
-                  className="w-full rounded-md bg-[#030712] border border-gray-700 px-2 py-1 text-gray-100 outline-none focus:border-indigo-500"
-                />
-                <p className="text-[10px] text-gray-500">
-                  Shown on the dashboard and future host views.
-                </p>
-              </div>
-              <div className="space-y-1">
-                <label className="block text-gray-300">Login email</label>
-                <input
-                  type="email"
-                  placeholder="you@company.com"
-                  className="w-full rounded-md bg-[#030712] border border-gray-700 px-2 py-1 text-gray-100 outline-none focus:border-indigo-500"
-                />
-                <p className="text-[10px] text-gray-500">
-                  Your JBAlive login email. In production this will sync with Clerk.
-                </p>
-              </div>
-            </div>
+      {/* Active tab content */}
+      <div className="rounded-2xl border border-slate-800 bg-[#050814] p-4 md:p-5">
+        {activeTab === "account" && <AccountSettings />}
+        {activeTab === "workspace" && <WorkspaceSettings />}
+        {activeTab === "notifications" && <NotificationSettings />}
+        {activeTab === "billing" && <BillingSettings />}
+        {activeTab === "danger" && <DangerZone />}
+      </div>
+    </div>
+  );
+}
 
-            <div className="grid gap-3 md:grid-cols-2 text-xs">
-              <div className="space-y-1">
-                <label className="block text-gray-300">Password</label>
-                <input
-                  type="password"
-                  placeholder="••••••••••"
-                  className="w-full rounded-md bg-[#030712] border border-gray-700 px-2 py-1 text-gray-100 outline-none focus:border-indigo-500"
-                />
-                <p className="text-[10px] text-gray-500">
-                  Placeholder only – real password changes will happen via Clerk&apos;s
-                  secure flows.
-                </p>
-              </div>
-              <div className="flex items-end">
-                <button className="w-full rounded-full bg-indigo-600 px-3 py-1.5 text-[11px] font-semibold hover:bg-indigo-500">
-                  Open secure account portal
-                </button>
-              </div>
-            </div>
+/* ---------------- ACCOUNT SETTINGS ---------------- */
 
-            <p className="text-[10px] text-gray-500">
-              In a future release, clicking the button will open Clerk&apos;s hosted
-              account management (change email, password, 2FA, etc.) while still
-              keeping the branding consistent with JBAlive.
-            </p>
-          </section>
+function AccountSettings() {
+  return (
+    <div className="space-y-5 text-sm">
+      <div className="space-y-1">
+        <h2 className="text-sm font-semibold text-slate-100">
+          Account details
+        </h2>
+        <p className="text-xs text-slate-400 max-w-xl">
+          Basic information about you as the account owner. In production, these
+          settings will sync with your authentication provider (Clerk).
+        </p>
+      </div>
 
-          {/* WORKSPACE & BRANDING – “PREVIOUS SETTINGS” STYLE */}
-          <section className="rounded-xl border border-gray-800 bg-[#050814] p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-sm font-semibold text-gray-100">
-                  Workspace &amp; branding
-                </h2>
-                <p className="text-xs text-gray-400">
-                  Set the default look and feel for your events and pages.
-                </p>
-              </div>
-              <span className="text-[10px] text-gray-500">
-                Applies across all future events
-              </span>
-            </div>
-
-            <div className="grid gap-3 md:grid-cols-2 text-xs">
-              <div className="space-y-1">
-                <label className="block text-gray-300">Workspace name</label>
-                <input
-                  type="text"
-                  placeholder="e.g. JBAlive Studio / JBA Consults"
-                  className="w-full rounded-md bg-[#030712] border border-gray-700 px-2 py-1 text-gray-100 outline-none focus:border-indigo-500"
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="block text-gray-300">Default sender name</label>
-                <input
-                  type="text"
-                  placeholder="e.g. JBAlive Events Team"
-                  className="w-full rounded-md bg-[#030712] border border-gray-700 px-2 py-1 text-gray-100 outline-none focus:border-indigo-500"
-                />
-              </div>
-            </div>
-
-            <div className="grid gap-3 md:grid-cols-3 text-xs">
-              <div className="space-y-1">
-                <label className="block text-gray-300">Primary brand color</label>
-                <input
-                  type="text"
-                  placeholder="#4F46E5"
-                  className="w-full rounded-md bg-[#030712] border border-gray-700 px-2 py-1 text-gray-100 outline-none focus:border-indigo-500"
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="block text-gray-300">Accent color</label>
-                <input
-                  type="text"
-                  placeholder="#F97316"
-                  className="w-full rounded-md bg-[#030712] border border-gray-700 px-2 py-1 text-gray-100 outline-none focus:border-indigo-500"
-                />
-              </div>
-              <div className="space-y-1">
-                <label className="block text-gray-300">Preferred font</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Inter / sans-serif"
-                  className="w-full rounded-md bg-[#030712] border border-gray-700 px-2 py-1 text-gray-100 outline-none focus:border-indigo-500"
-                />
-              </div>
-            </div>
-
-            <div className="grid gap-3 md:grid-cols-2 text-xs">
-              <div className="space-y-1">
-                <label className="block text-gray-300">Default event layout</label>
-                <select className="w-full rounded-md bg-[#030712] border border-gray-700 px-2 py-1 text-gray-100 outline-none focus:border-indigo-500">
-                  <option>Conversion-focused (short & sharp)</option>
-                  <option>Story-driven (more narrative)</option>
-                  <option>Detailed (technical / B2B)</option>
-                </select>
-              </div>
-              <div className="space-y-1">
-                <label className="block text-gray-300">Default event background</label>
-                <select className="w-full rounded-md bg-[#030712] border border-gray-700 px-2 py-1 text-gray-100 outline-none focus:border-indigo-500">
-                  <option>Dark gradient (JBAlive style)</option>
-                  <option>Light clean background</option>
-                  <option>Brand image from library</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-2 pt-1">
-              <button className="rounded-full border border-gray-700 px-3 py-1.5 text-[11px] text-gray-300 hover:border-indigo-500">
-                Reset to defaults
-              </button>
-              <button className="rounded-full bg-indigo-600 px-3 py-1.5 text-[11px] font-semibold text-white hover:bg-indigo-500">
-                Save workspace settings
-              </button>
-            </div>
-          </section>
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="space-y-2">
+          <label className="block text-xs font-medium text-slate-300">
+            Display name
+          </label>
+          <input
+            type="text"
+            defaultValue="Joshua Benjamin Ali"
+            className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-100 outline-none focus:border-indigo-500"
+          />
+          <p className="text-[11px] text-slate-500">
+            This can be shown on event pages as the host name.
+          </p>
         </div>
 
-        {/* RIGHT COLUMN – PREFERENCES & NOTIFICATIONS */}
-        <div className="space-y-4">
-          {/* PLATFORM PREFERENCES (FROM OLD SETTINGS) */}
-          <section className="rounded-xl border border-gray-800 bg-[#050814] p-4 space-y-3">
-            <h2 className="text-sm font-semibold text-gray-100">
-              Platform preferences
-            </h2>
-            <p className="text-xs text-gray-400">
-              Timezone, language and default dashboard behavior.
-            </p>
+        <div className="space-y-2">
+          <label className="block text-xs font-medium text-slate-300">
+            Login email (read-only in MVP)
+          </label>
+          <input
+            type="email"
+            placeholder="your@email.com"
+            className="w-full rounded-lg border border-slate-800 bg-slate-900/70 px-3 py-2 text-xs text-slate-400 outline-none"
+            readOnly
+          />
+          <p className="text-[11px] text-slate-500">
+            Email &amp; password are managed by the auth provider (Clerk). In a later
+            version, this will reflect your actual Clerk account email.
+          </p>
+        </div>
+      </div>
 
-            <div className="space-y-3 text-xs">
-              <div className="grid gap-3 md:grid-cols-2">
-                <div className="space-y-1">
-                  <label className="block text-gray-300">Timezone</label>
-                  <select className="w-full rounded-md bg-[#030712] border border-gray-700 px-2 py-1 text-gray-100 outline-none focus:border-indigo-500">
-                    <option>Europe/Warsaw (CET)</option>
-                    <option>Europe/London (GMT)</option>
-                    <option>US/Eastern</option>
-                    <option>US/Pacific</option>
-                  </select>
-                </div>
-                <div className="space-y-1">
-                  <label className="block text-gray-300">Language</label>
-                  <select className="w-full rounded-md bg-[#030712] border border-gray-700 px-2 py-1 text-gray-100 outline-none focus:border-indigo-500">
-                    <option>English</option>
-                    <option>Polish (coming soon)</option>
-                    <option>Other languages (roadmap)</option>
-                  </select>
-                </div>
-              </div>
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="space-y-2">
+          <label className="block text-xs font-medium text-slate-300">
+            Timezone
+          </label>
+          <select className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-100 outline-none focus:border-indigo-500">
+            <option>Europe/Warsaw (CET)</option>
+            <option>UTC</option>
+            <option>Europe/London</option>
+            <option>America/New_York</option>
+          </select>
+          <p className="text-[11px] text-slate-500">
+            Used for displaying event times in your dashboard summary.
+          </p>
+        </div>
 
-              <div className="space-y-2">
-                <label className="block text-gray-300 text-xs">
-                  Default dashboard view
-                </label>
-                <div className="space-y-1">
-                  <label className="flex items-center gap-2">
-                    <input type="radio" name="defaultDashboard" className="accent-indigo-500" defaultChecked />
-                    <span>Overview (high-level stats & next events)</span>
-                  </label>
-                  <label className="flex items-center gap-2">
-                    <input type="radio" name="defaultDashboard" className="accent-indigo-500" />
-                    <span>Events list</span>
-                  </label>
-                  <label className="flex items-center gap-2">
-                    <input type="radio" name="defaultDashboard" className="accent-indigo-500" />
-                    <span>Event Studio (for power users)</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-          </section>
+        <div className="space-y-2">
+          <label className="block text-xs font-medium text-slate-300">
+            Language
+          </label>
+          <select className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-100 outline-none focus:border-indigo-500">
+            <option>English</option>
+            <option>Polish (planned)</option>
+          </select>
+          <p className="text-[11px] text-slate-500">
+            In the future, this will localise UI labels and system emails.
+          </p>
+        </div>
+      </div>
 
-          {/* NOTIFICATIONS – FROM PREVIOUS SETTINGS */}
-          <section className="rounded-xl border border-gray-800 bg-[#050814] p-4 space-y-3">
-            <h2 className="text-sm font-semibold text-gray-100">
-              Notifications
-            </h2>
-            <p className="text-xs text-gray-400">
-              Decide what JBAlive should email you about.
-            </p>
+      <div className="mt-2 flex flex-col gap-3 md:flex-row md:items-center md:justify-between border-t border-slate-800 pt-4">
+        <div className="text-[11px] text-slate-500 max-w-md">
+          <p className="font-semibold text-slate-300 mb-1">Account security</p>
+          <p>
+            To update your email, password or two-factor authentication, this panel
+            will link into the Clerk <span className="italic">Account / Security</span>{" "}
+            screen in a later version.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => alert("In the full version this will open the account security page.")}
+          className="rounded-full bg-slate-800 px-4 py-2 text-xs font-medium text-slate-100 hover:bg-slate-700"
+        >
+          Open account security (placeholder)
+        </button>
+      </div>
 
-            <div className="space-y-2 text-xs">
-              <label className="flex items-start gap-2">
-                <input type="checkbox" defaultChecked className="mt-0.5 accent-indigo-500" />
-                <span>
-                  Send me a summary after each event
-                  <span className="block text-[10px] text-gray-500">
-                    Registrations, live attendance, average watch time and top engagement signals.
-                  </span>
-                </span>
-              </label>
-              <label className="flex items-start gap-2">
-                <input type="checkbox" defaultChecked className="mt-0.5 accent-indigo-500" />
-                <span>
-                  Notify me about low registration or show-up risk
-                  <span className="block text-[10px] text-gray-500">
-                    Early warning if an event is underperforming vs. typical benchmarks.
-                  </span>
-                </span>
-              </label>
-              <label className="flex items-start gap-2">
-                <input type="checkbox" className="mt-0.5 accent-indigo-500" />
-                <span>
-                  Product updates &amp; roadmap
-                  <span className="block text-[10px] text-gray-500">
-                    Occasional updates when major features launch (Event Studio, replay hub, etc.).
-                  </span>
-                </span>
-              </label>
-            </div>
-          </section>
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={() => alert("In the full version this would save account changes.")}
+          className="rounded-full bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-500"
+        >
+          Save account changes
+        </button>
+      </div>
+    </div>
+  );
+}
 
-          {/* BILLING PLACEHOLDER (OPTIONAL FROM OLD SETTINGS) */}
-          <section className="rounded-xl border border-gray-800 bg-[#050814] p-4 space-y-3 text-xs">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-sm font-semibold text-gray-100">
-                  Billing &amp; plan
-                </h2>
-                <p className="text-xs text-gray-400">
-                  Manage your JBAlive plan and Stripe billing in the future.
-                </p>
-              </div>
-              <span className="rounded-full border border-gray-700 px-2 py-0.5 text-[10px] text-gray-400">
-                MVP placeholder
-              </span>
-            </div>
+/* ---------------- WORKSPACE SETTINGS ---------------- */
 
-            <p className="text-[11px] text-gray-400">
-              For now, plan changes are handled manually (or via the public pricing page
-              and Stripe links). Later, this section will show your active plan, invoices
-              and upgrade options directly inside the dashboard.
-            </p>
+function WorkspaceSettings() {
+  return (
+    <div className="space-y-5 text-sm">
+      <div className="space-y-1">
+        <h2 className="text-sm font-semibold text-slate-100">
+          Workspace &amp; appearance
+        </h2>
+        <p className="text-xs text-slate-400 max-w-xl">
+          Settings that affect the whole JBAlive workspace – naming, branding and
+          how the dashboard feels to use.
+        </p>
+      </div>
 
-            <button className="mt-2 w-full rounded-full border border-gray-700 px-3 py-1.5 text-[11px] text-gray-300 hover:border-indigo-500">
-              Open billing portal (coming soon)
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="space-y-2">
+          <label className="block text-xs font-medium text-slate-300">
+            Workspace name
+          </label>
+          <input
+            type="text"
+            defaultValue="JBAlive (JBA Consults)"
+            className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-100 outline-none focus:border-indigo-500"
+          />
+          <p className="text-[11px] text-slate-500">
+            This can be shown in the dashboard header and future team sharing views.
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-xs font-medium text-slate-300">
+            Default event type
+          </label>
+          <select className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-100 outline-none focus:border-indigo-500">
+            <option>Live launch / masterclass</option>
+            <option>Recurring webinar</option>
+            <option>Internal training</option>
+            <option>Private client session</option>
+          </select>
+          <p className="text-[11px] text-slate-500">
+            Used as the default template when you create new events.
+          </p>
+        </div>
+      </div>
+
+      {/* Theme / UI density */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="space-y-2">
+          <label className="block text-xs font-medium text-slate-300">
+            Theme
+          </label>
+          <div className="flex items-center gap-3 text-xs text-slate-300">
+            <button className="rounded-lg border border-indigo-500 bg-indigo-600/20 px-3 py-1.5">
+              Dark (current)
             </button>
-          </section>
+            <button className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 opacity-60 cursor-not-allowed">
+              Light (coming soon)
+            </button>
+          </div>
+          <p className="text-[11px] text-slate-500">
+            JBAlive is optimised for dark mode today. Light mode can be added later.
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-xs font-medium text-slate-300">
+            UI density
+          </label>
+          <select className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-100 outline-none focus:border-indigo-500">
+            <option>Comfortable</option>
+            <option>Compact</option>
+          </select>
+          <p className="text-[11px] text-slate-500">
+            Conceptual setting – later this can control padding and font sizes.
+          </p>
+        </div>
+      </div>
+
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={() => alert("In the full version this would save workspace preferences.")}
+          className="rounded-full bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-500"
+        >
+          Save workspace preferences
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ---------------- NOTIFICATIONS ---------------- */
+
+function NotificationSettings() {
+  return (
+    <div className="space-y-5 text-sm">
+      <div className="space-y-1">
+        <h2 className="text-sm font-semibold text-slate-100">
+          Notifications
+        </h2>
+        <p className="text-xs text-slate-400 max-w-xl">
+          Control which alerts you receive about registrations, live engagement
+          and follow-up.
+        </p>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 text-xs">
+        <div className="space-y-3">
+          <p className="font-medium text-slate-200">Email notifications</p>
+
+          <label className="flex items-start gap-2">
+            <input type="checkbox" defaultChecked className="mt-0.5 accent-indigo-500" />
+            <span>
+              Registration summaries{" "}
+              <span className="block text-[11px] text-slate-500">
+                Receive a short email when someone registers for a flagship event.
+              </span>
+            </span>
+          </label>
+
+          <label className="flex items-start gap-2">
+            <input type="checkbox" defaultChecked className="mt-0.5 accent-indigo-500" />
+            <span>
+              “Go live” reminders{" "}
+              <span className="block text-[11px] text-slate-500">
+                Reminder 30 minutes before your event is scheduled to start.
+              </span>
+            </span>
+          </label>
+
+          <label className="flex items-start gap-2">
+            <input type="checkbox" className="mt-0.5 accent-indigo-500" />
+            <span>
+              Daily recap{" "}
+              <span className="block text-[11px] text-slate-500">
+                One daily recap email for all events and key metrics.
+              </span>
+            </span>
+          </label>
+        </div>
+
+        <div className="space-y-3">
+          <p className="font-medium text-slate-200">In-dashboard alerts</p>
+
+          <label className="flex items-start gap-2">
+            <input type="checkbox" defaultChecked className="mt-0.5 accent-indigo-500" />
+            <span>
+              New registration notifications{" "}
+              <span className="block text-[11px] text-slate-500">
+                Show subtle notifications in the dashboard when new attendees register.
+              </span>
+            </span>
+          </label>
+
+          <label className="flex items-start gap-2">
+            <input type="checkbox" defaultChecked className="mt-0.5 accent-indigo-500" />
+            <span>
+              Event health alerts{" "}
+              <span className="block text-[11px] text-slate-500">
+                In the future, this can surface low show-up rates or tech issues.
+              </span>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={() => alert("In the full version this would save notification preferences.")}
+          className="rounded-full bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-500"
+        >
+          Save notification settings
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ---------------- BILLING ---------------- */
+
+function BillingSettings() {
+  return (
+    <div className="space-y-5 text-sm">
+      <div className="space-y-1">
+        <h2 className="text-sm font-semibold text-slate-100">
+          Billing overview
+        </h2>
+        <p className="text-xs text-slate-400 max-w-xl">
+          For now this is a static billing preview for the MVP. Later, this can read
+          from your Stripe subscription and show real invoices and usage.
+        </p>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-[1.5fr,1.2fr]">
+        <div className="space-y-3 rounded-xl border border-slate-800 bg-slate-900/60 p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs font-semibold text-slate-200">Current plan</p>
+              <p className="text-lg font-semibold text-slate-50">Pro (example)</p>
+            </div>
+            <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-[11px] text-emerald-300">
+              Active
+            </span>
+          </div>
+
+          <p className="text-xs text-slate-400">
+            Unlimited events, up to 500 attendees per event, engagement tools and
+            automated replays.
+          </p>
+
+          <div className="text-xs text-slate-300">
+            <p>€29 / month</p>
+            <p className="text-slate-500">Billed via Stripe (linked externally).</p>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => alert("In the full version this would open the Stripe customer portal.")}
+            className="mt-2 rounded-full border border-slate-700 px-4 py-2 text-xs text-slate-100 hover:border-indigo-400"
+          >
+            Manage billing (placeholder)
+          </button>
+        </div>
+
+        <div className="space-y-3 rounded-xl border border-slate-800 bg-slate-900/60 p-4 text-xs text-slate-300">
+          <p className="font-semibold text-slate-100">Usage snapshot (concept)</p>
+          <ul className="space-y-1 text-slate-400">
+            <li>• 3 active events this month</li>
+            <li>• 148 registrations on latest launch</li>
+            <li>• 2 upcoming live sessions scheduled</li>
+          </ul>
+          <p className="text-[11px] text-slate-500 mt-2">
+            In the future, this card can show actual usage and soft limits based on your
+            plan (registrations, concurrent events, team seats, etc.).
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------------- DANGER ZONE ---------------- */
+
+function DangerZone() {
+  return (
+    <div className="space-y-5 text-sm">
+      <div className="space-y-1">
+        <h2 className="text-sm font-semibold text-red-400">Danger zone</h2>
+        <p className="text-xs text-slate-400 max-w-xl">
+          High-impact actions relating to your JBAlive workspace. In the MVP these are
+          purely visual and do not delete anything.
+        </p>
+      </div>
+
+      <div className="space-y-3 rounded-xl border border-red-900/60 bg-red-950/30 p-4">
+        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-xs font-semibold text-slate-100">
+              Cancel subscription (concept)
+            </p>
+            <p className="text-[11px] text-slate-400 max-w-md">
+              Eventually this will connect to Stripe so users can cancel plans
+              themselves. For now it&apos;s a placeholder so the flow is visible.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => alert("This is a placeholder – no real subscription is cancelled.")}
+            className="rounded-full border border-red-600 px-4 py-2 text-xs font-medium text-red-200 hover:bg-red-600/20"
+          >
+            Cancel subscription (placeholder)
+          </button>
+        </div>
+
+        <div className="border-t border-red-900/60 pt-3 mt-2">
+          <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-xs font-semibold text-slate-100">
+                Delete workspace (concept)
+              </p>
+              <p className="text-[11px] text-slate-400 max-w-md">
+                In a real app this would archive or permanently delete the JBAlive
+                workspace – including events, pages and media. Here it&apos;s just a
+                visual representation.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => alert("Nothing is actually deleted – this is a design-only placeholder.")}
+              className="rounded-full border border-red-600 px-4 py-2 text-xs font-medium text-red-200 hover:bg-red-600/20"
+            >
+              Delete workspace (placeholder)
+            </button>
+          </div>
         </div>
       </div>
     </div>
